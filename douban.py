@@ -21,7 +21,7 @@ headers = {
   'sec-ch-ua-platform': '"macOS"'
 }
 
-openai.api_key = os.environ.get('OPENAIKEY')
+openai.api_key = os.environ.get('SCKEY')
 url= 'https://m.douban.com/rexxar/api/v2/status/user_timeline/1413857?max_id=&ck=9iCl&for_mobile=1'
 
 response = requests.request("GET", url, headers=headers)
