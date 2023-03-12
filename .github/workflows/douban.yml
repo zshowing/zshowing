@@ -20,6 +20,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests openai
       - name: Update douban
+        env:
+          SCKEY: ${{ OPENAIKEY }}
         run: |
           python douban.py
       - name: Commit results
@@ -27,5 +29,5 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
-          git commit -m "douban CSV updated" || echo "No changes to commit"
+          git commit -m "douban latest updated" || echo "No changes to commit"
           git push origin || echo "No changes to commit"
