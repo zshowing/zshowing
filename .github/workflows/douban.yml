@@ -21,7 +21,7 @@ jobs:
           pip install requests openai
       - name: Update douban
         env:
-          SCKEY: ${{ OPENAIKEY }}
+          SCKEY: ${{ secrets.OPENAIKEY }}
         run: |
           python douban.py
       - name: Commit results
