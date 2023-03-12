@@ -51,7 +51,7 @@ for item in items:
 				latestId = statudid
 				isFirstStatus = False
 			completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "从现在起，你将扮演一个在网络上回帖的用户。请试着在社交网络上对下列动态生成回复，除了回复的文字之外不含任何其他东西（但请不要只限于对文字的同意和奉承，最后有自己的见解或者引申出另外的内容）：" + text}])
-			answer = "来自ChatGPT的回复：" completion.choices[0].message.content
+			answer = "来自ChatGPT的回复：" + completion.choices[0].message.content
 			payload='rv_comment='+ quote(answer)+'&resp_type=c_dict&ck=9iCl'
 			res = requests.request('POST', 'https://www.douban.com/j/status/'+ statudid + '/add_comment', data=payload, headers = headers)
 			time.sleep(3)
