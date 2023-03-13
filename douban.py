@@ -35,6 +35,7 @@ previousId = ""
 if os.path.exists('status_id.txt'):
 	with open('status_id.txt', 'r') as f:
 		previousId = f.read().strip()
+		print(previousId)
 
 for item in items:
 	itemtype = item['type']
@@ -45,6 +46,7 @@ for item in items:
 		text = status['text']
 		statudid = status['id']
 		if statudid == previousId:
+			print("match previous!")
 			break
 		if act == '说':
 			if isFirstStatus:
