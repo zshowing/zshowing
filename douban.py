@@ -58,5 +58,6 @@ for item in items:
 			res = requests.request('POST', 'https://www.douban.com/j/status/'+ statudid + '/add_comment', data=payload, headers = headers)
 			time.sleep(3)
 
-with open('status_id.txt', 'w+') as f:
-	f.write(latestId)
+if latestId != '':
+	with open('status_id.txt', 'w+') as f:
+		f.write(latestId)
