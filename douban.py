@@ -56,6 +56,7 @@ for item in items:
 			answer = "来自ChatGPT的回复：" + completion.choices[0].message.content
 			payload='rv_comment='+ quote(answer)+'&resp_type=c_dict&ck=9iCl'
 			res = requests.request('POST', 'https://www.douban.com/j/status/'+ statudid + '/add_comment', data=payload, headers = headers)
+			print("Done commenting"+statudid)
 			time.sleep(3)
 
 if latestId != '':
