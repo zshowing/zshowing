@@ -79,7 +79,7 @@ if int(msg) > count:
   if response.json()["code"] == 200:
     data = {"count": count, "timestamp": now}
     with open('last163status.json', 'w+') as f:
-      json.dump(data, f)
+      json.dump(data, f, default=str)
     print("Done re-submitting.        ", end ='\r')
 else:
   print("No feedback at " + current_time + ".", end='\r')
