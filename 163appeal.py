@@ -2,6 +2,7 @@ import requests
 from datetime import datetime
 import re
 import json
+import sys
 import os
 
 token = ""
@@ -81,15 +82,15 @@ if response.json()["code"] == 200:
 		print("Done re-submitting.        ", end ='\r')
 	with open('163-output.txt', 'w+') as f:
 		f.write('Done re-submitting,' + ", time using: " + str(now - previous).split('.', 2)[0])
-	return 0
+	sys.exit(0)
 elif int(msg) == 0:
 	with open('last163status.json', 'w+') as f:
 		data = {"count": 0, "timestamp": now}
 		json.dump(data, f, default=str)
 	with open('163-output.txt', 'w+') as f:
 		f.write('Reset the count to 0')
-	return 0
+	sys.exit(0)
 else:
 	print("No feedback.", end='\r')
-	return 1
+	sys.exit(1)
 
