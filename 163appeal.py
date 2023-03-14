@@ -16,7 +16,7 @@ count = 0
 
 previous = 0
 
-f = open('163appeal.txt')
+f = open('163cookies.txt')
 for line in f:
   result = re.search('csrf_token=([a-z0-9]+)', line)
   result2 = re.search('\'cookie: (.*)\'', line)
