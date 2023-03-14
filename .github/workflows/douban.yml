@@ -1,4 +1,4 @@
-name: Update Douban
+name: Douban Update
 
 on:
   schedule:
