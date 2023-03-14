@@ -58,7 +58,7 @@ print("Checking counts...        ", end='\r')
 response = requests.post(counturl + token, 
   data="params="+param1, 
   headers=HEADERS)
-print("fuck", response.text)
+print("fuck", param1, token, HEADERS, response.text)
 msg = response.json()['msg']
 
 if count == 0:
