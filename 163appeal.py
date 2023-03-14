@@ -74,14 +74,14 @@ if int(msg) > count:
     print("Got a respond at " + current_time + ".")
   previous = datetime.now()
   response = requests.post(submiturl + token, data="params="+param2, headers=HEADERS)
-  if response.json()["code"] == 200:
-		data = {"count": int(msg), "timestamp": now}
-		with open('last163status.json', 'w+') as f:
-			json.dump(data, f, default=str)
+if response.json()["code"] == 200:
+	data = {"count": int(msg), "timestamp": now}
+	with open('last163status.json', 'w+') as f:
+		json.dump(data, f, default=str)
 		print("Done re-submitting.        ", end ='\r')
-		with open('163-output.txt', 'w+') as f:
-			f.write('Done re-submitting,' + ", time using: " + str(now - previous).split('.', 2)[0])
-		return 0
+	with open('163-output.txt', 'w+') as f:
+		f.write('Done re-submitting,' + ", time using: " + str(now - previous).split('.', 2)[0])
+	return 0
 elif int(msg) == 0:
 	with open('last163status.json', 'w+') as f:
 		data = {"count": 0, "timestamp": now}
