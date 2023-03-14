@@ -77,7 +77,7 @@ if int(msg) > count:
     data="params="+param2,
     headers=HEADERS)
   if response.json()["code"] == 200:
-    data = {"count": count, "timestamp": now}
+    data = {"count": int(msg), "timestamp": now}
     with open('last163status.json', 'w+') as f:
       json.dump(data, f, default=str)
     print("Done re-submitting.        ", end ='\r')
