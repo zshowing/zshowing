@@ -16,12 +16,11 @@ cookie = ""
 count = 0
 previous = 0
 
-if os.path.exists('last163status.json'):
-	with open('last163status.json', 'r') as f:
+if os.path.exists('163-last-status.json'):
+	with open('163-last-status.json', 'r') as f:
 		data = json.load(f)
 		count = int(data['count'])
 		previous = datetime.strptime(data['timestamp'], "%Y-%m-%d %H:%M:%S.%f")
-		print(count, previous)
 
 f = open('163cookies.txt')
 for line in f:
@@ -68,23 +67,17 @@ if count == 0:
 if int(msg) > count:
 	print("Eureka!                ", end='\r')
 	now = datetime.now()
-	current_time = now.strftime("%H:%M")
-	if isinstance(previous, datetime):
-		print("Got a respond at " + current_time + ", time using: " + str(now - previous).split('.', 2)[0] )
-	else:
-		print("Got a respond at " + current_time + ".")
-
 	response = requests.post(submiturl + token, data="params="+param2, headers=HEADERS)
 	if response.json()["code"] == 200:
 		data = {"count": int(msg), "timestamp": now}
-		with open('last163status.json', 'w+') as f:
+		with open('163-last-status.json', 'w+') as f:
 			json.dump(data, f, default=str)
 		print("Done re-submitting.        ", end ='\r')
 		with open('163-output.txt', 'w+') as f:
 			f.write('Done re-submitting' + ", time using: " + str(now - previous).split('.', 2)[0])
 		sys.exit(0)
 	elif int(msg) == 0:
-		with open('last163status.json', 'w+') as f:
+		with open('163-last-status.json', 'w+') as f:
 			data = {"count": 0, "timestamp": now}
 			json.dump(data, f, default=str)
 		with open('163-output.txt', 'w+') as f:
