@@ -24,17 +24,18 @@ jobs:
         run: |
           python 163appeal.py
       - name: Commit results
+        id: commiting
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
           git commit -m "163 latest updated" || echo "No changes to commit"
-          git push origin || echo "No changes to commit"
+          git push origin || echo "RESULT=1" >> $GITHUB_OUTPUT
       - name: 输出 Python 脚本运行结果
         id: python-output
         run: echo "RESULT=$(cat 163-output.txt)" >> $GITHUB_OUTPUT
       - name: Send Notification
-        if: ${{ steps.run_script.outputs.exit_code == 0 }}
+        if: ${{ steps.commiting.outputs.RESULT != 1 }}
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
