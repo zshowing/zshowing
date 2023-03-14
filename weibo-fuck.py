@@ -3,6 +3,7 @@ import http.client
 import mimetypes
 from codecs import encode
 import json
+import os
 
 realname = os.environ.get('REAL_NAME')
 email = os.environ.get('EMAIL')
