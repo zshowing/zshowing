@@ -32,7 +32,7 @@ jobs:
           git push origin || echo "No changes to commit"
       - name: 输出 Python 脚本运行结果
         id: python-output
-        run: echo "output=$(cat 163-output.txt)" >> $GITHUB_OUTPUT
+        run: echo "163result=$(cat 163-output.txt)" >> $GITHUB_OUTPUT
       - name: Send Notification
         if: ${{ steps.run_script.outputs.exit_code == 0 }}
         uses: appleboy/telegram-action@master
@@ -40,4 +40,4 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message: |
-            ${{ env.$GITHUB_OUTPUT }}
+            ${{ output.163result }}
