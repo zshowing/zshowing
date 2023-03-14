@@ -14,7 +14,7 @@ param1 = ""
 param2 = ""
 cookie = ""
 count = 0
-previous = 0
+previous = None
 
 if os.path.exists('163-last-status.json'):
 	with open('163-last-status.json', 'r') as f:
@@ -74,7 +74,10 @@ if int(msg) > count:
 			json.dump(data, f, default=str)
 		print("Done re-submitting.        ", end ='\r')
 		with open('163-output.txt', 'w+') as f:
-			f.write('Done re-submitting' + ", time using: " + str(now - previous).split('.', 2)[0])
+			if previous != None:
+				f.write('Done re-submitting' + ", time using: " + str(now - previous).split('.', 2)[0])
+			else:
+				f.write('Done re-submitting.')
 		sys.exit(0)
 	elif int(msg) == 0:
 		with open('163-last-status.json', 'w+') as f:
