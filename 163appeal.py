@@ -86,5 +86,5 @@ elif int(msg) == 0:
 		data = {"count": 0, "timestamp": now}
 		json.dump(data, f, default=str)
 else:
-  print("No feedback at " + current_time + ".", end='\r')
+  print("No feedback.", end='\r')
 
