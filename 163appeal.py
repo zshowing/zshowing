@@ -19,7 +19,7 @@ if os.path.exists('last163status.json'):
 	with open('last163status.json', 'r') as f:
 		data = json.load(f)
 		count = int(data['count'])
-		previous = datetime.fromtimestamp(int(data['timestamp']))
+		previous = datetime.strptime(data['timestamp'], "%Y-%m-%d %H:%M:%S.%f")
 		print(count, previous)
 
 f = open('163cookies.txt')
