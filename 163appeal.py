@@ -1,8 +1,7 @@
 import requests
-import time
 from datetime import datetime
-import sys
 import re
+import json
 
 token = ""
 counturl = "https://music.163.com/weapi/pl/count"
@@ -13,8 +12,14 @@ param1 = ""
 param2 = ""
 cookie = ""
 count = 0
-
 previous = 0
+
+if os.path.exists('last163status.json'):
+	with open('last163status.json', 'r') as f:
+    data = json.load(f)
+    count = int(data['count'])
+    previous = datetime.fromtimestamp(int(data['timestamp']))
+		print(count, previous)
 
 f = open('163cookies.txt')
 for line in f:
@@ -50,11 +55,6 @@ HEADERS = {
     'cookie': cookie
 }
 
-if len(sys.argv) > 1:
-  datestr = datetime.now().strftime('%b %d %Y')
-  previous = datetime.strptime(datestr + " " + sys.argv[1], '%b %d %Y %H:%M')
-
-print("Checking counts...        ", end='\r')
 response = requests.post(counturl + token, 
   data="params="+param1, 
   headers=HEADERS)
@@ -76,10 +76,10 @@ if int(msg) > count:
     data="params="+param2,
     headers=HEADERS)
   if response.json()["code"] == 200:
-    count += 1
+    data = {"count": count, "timestamp": now}
+    with open('last163status.json', 'w+') as f:
+      json.dump(data, f)
     print("Done re-submitting.        ", end ='\r')
 else:
-  now = datetime.now()
-  current_time = now.strftime("%H:%M")
   print("No feedback at " + current_time + ".", end='\r')
 
