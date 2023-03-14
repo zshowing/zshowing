@@ -81,7 +81,7 @@ if int(msg) > count:
     with open('last163status.json', 'w+') as f:
       json.dump(data, f, default=str)
     print("Done re-submitting.        ", end ='\r')
-else if int(msg) == 0:
+elif int(msg) == 0:
 	with open('last163status.json', 'w+') as f:
 		data = {"count": 0, "timestamp": now}
 	     	json.dump(data, f, default=str)
