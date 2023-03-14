@@ -82,7 +82,6 @@ if int(msg) > count:
 		print("Done re-submitting.        ", end ='\r')
 		with open('163-output.txt', 'w+') as f:
 			f.write('Done re-submitting,' + ", time using: " + str(now - previous).split('.', 2)[0])
-		sys.stdout.write('Done re-submitting,' + ", time using: " + str(now - previous).split('.', 2)[0])
 		sys.exit(0)
 	elif int(msg) == 0:
 		with open('last163status.json', 'w+') as f:
@@ -90,7 +89,6 @@ if int(msg) > count:
 			json.dump(data, f, default=str)
 		with open('163-output.txt', 'w+') as f:
 			f.write('Reset the count to 0')
-		sys.stdout.write('Reset the count to 0')
 		sys.exit(0)
 	else:
 		print("No feedback.", end='\r')
