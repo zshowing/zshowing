@@ -35,4 +35,4 @@ decoded = data.decode("utf-8")
 data_json = json.loads(decoded)
 code = data_json['code']
 with open('weibo_status.txt', 'w+') as f:
-    write(data_json['message'], f)
+    f.write(data_json['message'])
