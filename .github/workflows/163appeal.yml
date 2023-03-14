@@ -23,7 +23,6 @@ jobs:
         id: run_script
         run: |
           python 163appeal.py
-          echo ::set-output name=exit_code::${PIPESTATUS[0]}
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"
@@ -38,4 +37,4 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message: |
-            $(cat 163-output.txt)
+            ${{ steps.run_script.outputs }}
