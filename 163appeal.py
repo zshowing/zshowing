@@ -2,6 +2,7 @@ import requests
 from datetime import datetime
 import re
 import json
+import os
 
 token = ""
 counturl = "https://music.163.com/weapi/pl/count"
