@@ -58,6 +58,7 @@ print("Checking counts...        ", end='\r')
 response = requests.post(counturl + token, 
   data="params="+param1, 
   headers=HEADERS)
+print(response.text)
 msg = response.json()['msg']
 
 if count == 0:
