@@ -26,6 +26,7 @@ jobs:
       - name: Commit results
         id: commiting
         run: |
+          echo "RESULT=0" >> $GITHUB_OUTPUT
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
@@ -35,7 +36,7 @@ jobs:
         id: python-output
         run: echo "RESULT=$(cat 163-output.txt)" >> $GITHUB_OUTPUT
       - name: Send Notification
-        if: ${{ steps.commiting.outputs.RESULT != 1 }}
+        if: ${{ steps.commiting.outputs.RESULT == 0 }}
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
