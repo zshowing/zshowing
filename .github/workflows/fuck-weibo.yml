@@ -37,7 +37,7 @@ jobs:
           git push origin
       - name: 输出 Python 脚本运行结果
         id: python-output
-        run: echo "RESULT=$(cat weibo_status.txt.txt)" >> $GITHUB_OUTPUT
+        run: echo "RESULT=$(cat weibo_status.txt)" >> $GITHUB_OUTPUT
       - name: Send Notification
         uses: appleboy/telegram-action@master
         with:
