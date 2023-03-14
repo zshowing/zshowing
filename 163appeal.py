@@ -75,7 +75,7 @@ if int(msg) > count:
 		print("Done re-submitting.        ", end ='\r')
 		with open('163-output.txt', 'w+') as f:
 			if previous != None:
-				f.write('Done re-submitting' + ", time using: " + str(now - previous).split('.', 2)[0] + ", current count: " + msg)
+				f.write('Done re-submitting' + ", time using: " + str(now - previous).split('.', 2)[0] + ", current count: " + str(msg))
 			else:
 				f.write('Done re-submitting.')
 		sys.exit(0)
