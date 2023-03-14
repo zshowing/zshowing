@@ -30,7 +30,7 @@ jobs:
           git commit -m "163 latest updated" || echo "No changes to commit"
           git push origin || echo "No changes to commit"
       - name: Send Notification
-        uses: appleboy/telegram-action@
+        uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
