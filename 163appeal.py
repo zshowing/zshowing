@@ -84,7 +84,7 @@ if int(msg) > count:
 elif int(msg) == 0:
 	with open('last163status.json', 'w+') as f:
 		data = {"count": 0, "timestamp": now}
-	     	json.dump(data, f, default=str)
+		json.dump(data, f, default=str)
 else:
   print("No feedback at " + current_time + ".", end='\r')
 
