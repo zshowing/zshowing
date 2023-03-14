@@ -32,8 +32,8 @@ isFirstStatus = True
 latestId = ""
 previousId = ""
 
-if os.path.exists('status_id.txt'):
-	with open('status_id.txt', 'r') as f:
+if os.path.exists('douban_status_id.txt'):
+	with open('douban_status_id.txt', 'r') as f:
 		previousId = f.read().strip()
 		print(previousId)
 
@@ -60,5 +60,5 @@ for item in items:
 			time.sleep(3)
 
 if latestId != '':
-	with open('status_id.txt', 'w+') as f:
+	with open('douban_status_id.txt', 'w+') as f:
 		f.write(latestId)
