@@ -56,10 +56,9 @@ HEADERS = {
     'cookie': cookie
 }
 
-response = requests.post(counturl + token, 
-  data="params="+param1, 
-  headers=HEADERS)
+response = requests.post(counturl + token, data="params="+param1, headers=HEADERS)
 msg = response.json()['msg']
+print(token, param1, HEADERS, response.text)
 
 if count == 0:
   count = int(msg) - 1
