@@ -4,10 +4,10 @@ import mimetypes
 from codecs import encode
 import json
 
-realname = "os.environ.get('REAL_NAME')"
-email = "os.environ.get('EMAIL')"
-id_num = "os.environ.get('ID_NUMBER')"
-mobile = "os.environ.get('MOBILE_PHONE')"
+realname = os.environ.get('REAL_NAME')
+email = os.environ.get('EMAIL')
+id_num = os.environ.get('ID_NUMBER')
+mobile = os.environ.get('MOBILE_PHONE')
 
 conn = http.client.HTTPSConnection("ts.isc.org.cn")
 dataList = []
