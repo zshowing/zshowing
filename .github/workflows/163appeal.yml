@@ -20,8 +20,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
       - name: 163 appeal
+        id: run_script
         run: |
           python 163appeal.py
+          echo ::set-output name=exit_code::${PIPESTATUS[0]}
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"
@@ -30,9 +32,10 @@ jobs:
           git commit -m "163 latest updated" || echo "No changes to commit"
           git push origin || echo "No changes to commit"
       - name: Send Notification
+        if: ${{ steps.run_script.outputs.exit_code == 0 }}
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message: |
-            Github Actions Workflow is completed. Result: ${{ job.status }}
+            $(cat 163-output.txt)
