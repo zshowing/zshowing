@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 import time
 import json
 import os
-import cfscrape
+import undetected_chromedriver as uc
+from selenium import webdriver
 
 url = "https://javdb.com/users/collection_actors"
 saved_works = []
@@ -36,14 +37,31 @@ headers = {
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
 }
 
-session = requests.session()
-scraper = cfscrape.create_scraper(sess=session, delay=3, headers = headers)
-req = scraper.get(url)
+driver = uc.Chrome()
+driver.get('https://nowsecure.nl')
 
+options = ChromeOptions()
+options.add_argument("--headless") # 设置为无头模式，即不显示浏览器窗口
+options.add_argument("--disable-extensions") # 禁用扩展程序
+options.add_argument("--disable-gpu") # 禁用GPU加速
+options.add_argument("--no-sandbox") # 以沙盒模式运行
+
+# 设置请求头
+options.add_argument("user-agent=" + headers['user-agent'])
+options.add_argument("cookie=" + headers['cookie'])
+
+with Chrome(options=options) as driver:
+	for cookie in cookies:
+		driver.add_cookie(cookie)
+		driver.get(url)
+		time.sleep(3)
+		html = driver.page_source
+		print(html)
 # response = requests.request("GET", url, headers=headers, data=payload, proxies=proxies)
 # text = response.text
-text = req.content
-print(text)
+# text = req.content
+# print(text)
+text = ""
 soup = BeautifulSoup(text, features = 'html.parser')
 actors = soup.find_all('div', class_="actor-box")
 for actor in actors:
