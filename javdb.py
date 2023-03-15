@@ -4,9 +4,6 @@ from bs4 import BeautifulSoup
 import time
 import json
 import os
-import cloudscraper
-
-scraper = cloudscraper.create_scraper(delay=10,   browser={'custom': 'ScraperBot/1.0',})
 
 url = "https://javdb.com/users/collection_actors"
 saved_works = []
@@ -17,6 +14,10 @@ if os.path.isfile('javdb-works.json'):
 		saved_works = json.load(f)
 
 payload={}
+proxies = {
+    'http': 'http://localhost:9910',  # 设置HTTP代理
+    'https': 'http://localhost:9910'  # 设置HTTPS代理
+}
 headers = {
   'authority': 'javdb.com',
   'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -34,17 +35,14 @@ headers = {
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
 }
 
-req = scraper.get(url, headers = headers)
-# response = requests.request("GET", url, headers=headers, data=payload)
-# text = response.text
-text = req.content
-print(text)
+response = requests.request("GET", url, headers=headers, data=payload, proxies=proxies)
+text = response.text
 soup = BeautifulSoup(text, features = 'html.parser')
 actors = soup.find_all('div', class_="actor-box")
 for actor in actors:
 	nextpage = actor.find('a')
 	detailUrl = nextpage.get('href')
-	response2 = requests.request("GET", "https://javdb.com" + detailUrl, headers=headers, data=payload)
+	response2 = requests.request("GET", "https://javdb.com" + detailUrl, headers=headers, data=payload, proxies=proxies)
 	text2 = response2.text
 	soup2 = BeautifulSoup(text2, features = 'html.parser')
 
@@ -58,7 +56,7 @@ for actor in actors:
 		fanhao = fanhaodiv.find('strong').text
 		title = fanhaodiv.text
 
-		response3 = requests.request("GET", "https://javdb.com" + movieurl, headers=headers, data=payload, allow_redirects=False)
+		response3 = requests.request("GET", "https://javdb.com" + movieurl, headers=headers, data=payload, allow_redirects=False, proxies=proxies)
 		if response3.status_code == 302:
 			continue
 		text3 = response3.text
@@ -77,7 +75,7 @@ for actor in actors:
 				print(fanhaodiv.text, "出种子啦！")
 			break
 		print("Done check " + title)
-		# time.sleep(3)
+		time.sleep(3)
 
 with open("javdb-works.json", "w+") as f:
 	json.dump(saved_works, f)
