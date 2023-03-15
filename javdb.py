@@ -4,6 +4,9 @@ from bs4 import BeautifulSoup
 import time
 import json
 import os
+import cloudscraper
+
+scraper = cloudscraper.create_scraper(delay=10,   browser={'custom': 'ScraperBot/1.0',})
 
 url = "https://javdb.com/users/collection_actors"
 saved_works = []
@@ -31,8 +34,10 @@ headers = {
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
 }
 
-response = requests.request("GET", url, headers=headers, data=payload)
-text = response.text
+req = scraper.get(url, headers = headers)
+# response = requests.request("GET", url, headers=headers, data=payload)
+# text = response.text
+text = req.content
 print(text)
 soup = BeautifulSoup(text, features = 'html.parser')
 actors = soup.find_all('div', class_="actor-box")
