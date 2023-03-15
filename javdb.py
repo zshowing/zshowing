@@ -71,7 +71,7 @@ for actor in actors:
 				print(fanhaodiv.text, "出种子啦！")
 			break
 		print("Done check " + title)
-		time.sleep(3)
+		# time.sleep(3)
 
 with open("javdb-works.json", "w+") as f:
 	json.dump(saved_works, f)
