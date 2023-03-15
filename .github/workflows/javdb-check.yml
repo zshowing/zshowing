@@ -33,9 +33,10 @@ jobs:
           git push origin || echo "NEED-REPORT=false" >> $GITHUB_ENV
       - name: 输出 Python 脚本运行结果
         id: python-output
-        run: echo "RESULT=$(cat javdb.txt)" >> $GITHUB_OUTPUT
+        if: 'exists("javdb-prompt.txt")'
+        run: echo "RESULT=$(cat javdb-prompt.txt)" >> $GITHUB_OUTPUT
       - name: Send Notification
-        if: ${{ env.NEED-REPORT != 'false' }}
+        if: 'exists("javdb-prompt.txt")'
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
