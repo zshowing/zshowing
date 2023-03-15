@@ -70,6 +70,7 @@ for actor in actors:
 				prompt += fanhaodiv.text + "已出种！" + "地址： https://javdb.com" + movieurl + " \n"
 				print(fanhaodiv.text, "出种子啦！")
 			break
+		print("Done check " + title)
 		time.sleep(3)
 
 with open("javdb-works.json", "w+") as f:
