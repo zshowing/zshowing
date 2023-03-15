@@ -29,8 +29,8 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
-          git commit -m "javdb updated" || echo "NEED-REPORT=false" >> $GITHUB_ENV
-          git push origin || echo "NEED-REPORT=false" >> $GITHUB_ENV
+          git commit -m "javdb updated" || echo "nothing to commit"
+          git push origin || echo "nothing to push"
       - name: 输出 Python 脚本运行结果
         id: python-output
         run: 
