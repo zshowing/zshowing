@@ -45,6 +45,9 @@ options.add_argument("--headless") # 设置为无头模式，即不显示浏览�
 options.add_argument("--disable-extensions") # 禁用扩展程序
 options.add_argument("--disable-gpu") # 禁用GPU加速
 options.add_argument("--no-sandbox") # 以沙盒模式运行
+options.add_argument('--disable-application-cache')
+options.add_argument("--disable-setuid-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 
 # 设置请求头
 options.add_argument("user-agent=" + headers['user-agent'])
