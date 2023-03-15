@@ -76,7 +76,8 @@ with open("javdb-works.json", "w+") as f:
 	json.dump(saved_works, f)
 
 if prompt == "":
-	os.remove('javdb-prompt.txt')
+	if os.path.isfile('javdb-prompt.txt'):
+		os.remove('javdb-prompt.txt')
 else:
 	with open("javdb-prompt.txt", "w+") as f:
 		f.write(prompt)
