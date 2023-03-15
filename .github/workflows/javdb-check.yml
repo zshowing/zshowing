@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests BeautifulSoup
+          pip install requests beautifulsoup4
       - name: javdb check
         id: run_script
         run: |
@@ -33,7 +33,13 @@ jobs:
           git push origin || echo "NEED-REPORT=false" >> $GITHUB_ENV
       - name: 输出 Python 脚本运行结果
         id: python-output
-        run: echo "RESULT=$(cat javdb.txt)" >> $GITHUB_OUTPUT
+        run: 
+          if [ -f "javdb-prompt.txt" ]; then
+              echo "RESULT=$(cat javdb-prompt.txt)" >> $GITHUB_OUTPUT
+              echo "NEED-REPORT=true" >> $GITHUB_ENV
+          else
+            echo "NEED-REPORT=false" >> $GITHUB_ENV
+          fi
       - name: Send Notification
         if: ${{ env.NEED-REPORT != 'false' }}
         uses: appleboy/telegram-action@master
