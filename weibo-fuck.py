@@ -3,6 +3,7 @@ import http.client
 import mimetypes
 from codecs import encode
 import json
+import os
 
 realname = os.environ.get('REAL_NAME')
 email = os.environ.get('EMAIL')
@@ -35,4 +36,4 @@ decoded = data.decode("utf-8")
 data_json = json.loads(decoded)
 code = data_json['code']
 with open('weibo_status.txt', 'w+') as f:
-    write(data_json['message'], f)
+    f.write(data_json['message'])
