@@ -35,11 +35,11 @@ jobs:
         id: python-output
         run: 
           if [ -f "javdb-prompt.txt" ]; then
-              echo "RESULT=$(cat javdb-prompt.txt)" >> $GITHUB_OUTPUT
-              echo "NEED-REPORT=true" >> $GITHUB_ENV
+              echo "RESULT=$(cat javdb-prompt.txt)" >> $GITHUB_OUTPUT &&
+              echo "NEED-REPORT=true" >> $GITHUB_ENV;
           else
-            echo "NEED-REPORT=false" >> $GITHUB_ENV
-          fi
+            echo "NEED-REPORT=false" >> $GITHUB_ENV;
+          fi;
       - name: Send Notification
         if: ${{ env.NEED-REPORT != 'false' }}
         uses: appleboy/telegram-action@master
