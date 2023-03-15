@@ -43,6 +43,7 @@ req = scraper.get(url)
 # response = requests.request("GET", url, headers=headers, data=payload, proxies=proxies)
 # text = response.text
 text = req.content
+print(text)
 soup = BeautifulSoup(text, features = 'html.parser')
 actors = soup.find_all('div', class_="actor-box")
 for actor in actors:
