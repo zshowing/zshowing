@@ -5,7 +5,6 @@ import time
 import json
 import os
 import undetected_chromedriver as uc
-from selenium import webdriver
 
 url = "https://javdb.com/users/collection_actors"
 saved_works = []
@@ -37,10 +36,7 @@ headers = {
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
 }
 
-driver = uc.Chrome()
-driver.get('https://nowsecure.nl')
-
-options = ChromeOptions()
+options = uc.ChromeOptions()
 options.add_argument("--headless") # 设置为无头模式，即不显示浏览器窗口
 options.add_argument("--disable-extensions") # 禁用扩展程序
 options.add_argument("--disable-gpu") # 禁用GPU加速
@@ -53,7 +49,7 @@ options.add_argument("--disable-dev-shm-usage")
 options.add_argument("user-agent=" + headers['user-agent'])
 options.add_argument("cookie=" + headers['cookie'])
 
-with Chrome(options=options) as driver:
+with uc.Chrome(options=options) as driver:
 	for cookie in cookies:
 		driver.add_cookie(cookie)
 		driver.get(url)
