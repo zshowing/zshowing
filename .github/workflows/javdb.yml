@@ -17,6 +17,8 @@ jobs:
           python-version: 3.9
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1.2.0
+        with:
+          chrome-version: stable
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
