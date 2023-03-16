@@ -61,6 +61,11 @@ cookies = [
 ]
 
 driver = uc.Chrome(options=options, version_main=110, use_subprocess=True, executable_path="/usr/local/bin/chromedriver")
+
+# first visit home page
+url = "https://javdb.com"
+driver.get(url)
+driver.delete_all_cookies()
 for cookie in cookies:
 	driver.add_cookie(cookie)
 driver.get(url)
