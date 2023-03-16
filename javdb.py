@@ -47,20 +47,29 @@ options.add_argument("--disable-dev-shm-usage")
 
 # 设置请求头
 options.add_argument("user-agent=" + headers['user-agent'])
-options.add_argument("cookie=" + headers['cookie'])
 
-with uc.Chrome(options=options, version_main=110, use_subprocess=True, executable_path="/usr/local/bin/chromedriver",) as driver:
-	for cookie in cookies:
-		driver.add_cookie(cookie)
-		driver.get(url)
-		time.sleep(3)
-		html = driver.page_source
-		print(html)
+cookies = [
+    {'name': 'list_mode', 'value': 'h'},
+    {'name': 'theme', 'value': 'auto'},
+    {'name': 'locale', 'value': 'zh'},
+    {'name': 'over18', 'value': '1'},
+    {'name': '_ym_uid', 'value': '1678595611806523704'},
+    {'name': '_ym_d', 'value': '1678595611'},
+    {'name': 'remember_me_token', 'value': 'eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltOVNPRlZaTWxrNVdFTktTRlpWVlRWWmNYUnFJZz09IiwiZXhwIjoiMjAyMy0wMy0xOVQwNDozNzozMy4wMDBaIiwicHVyIjoiY29va2llLnJlbWVtYmVyX21lX3Rva2VuIn19--4ef12d6cd87106ba46037155a6fa3b17f09d43ef'},
+    {'name': '_ym_isad', 'value': '1'},
+    {'name': '_jdb_session', 'value': 'L8v7bXoXtWD0jlPCkjucQOptG5niRNlSUYRSWtc0IHeIpnfyjGe0Q7Pfv6kTCjj2p2gqqt0jn%2FOjSF87T7rELQa5%2FtGRQQjG5rxruUczT7pnsroIC1gVOTATeZRw1fc3QKKdN25KzFnSdGf2WcSMQzHJlqkeKpCJaZkQq3fRfdVg9L9j%2BKnZ5Q1%2BnQcvzwRDTSTTBbqQQM5bFYeNeIYJdWEPrVzPIuqrCxhByhBCFjrSoRRT7OGRJeA706OwjufUagNWgfZfG29GULkli8lJ%2FfJl4bMywij8h%2BM5qydTjZNqthN7xD9lXy%2Baw4j3hOZFKN%2FmfIVRORJs6parQlHnPh%2F9aQsA%2BYHJ0tjhaf4Q7900%2FSklJ46H1wLoaJ1QxQ%2FbfhA%3D--GNI0HSan1XZ9aVe8--TPBxqRNL1oN8zY8XipKs4w%3D%3D'},
+]
+
+driver = uc.Chrome(options=options, version_main=110, use_subprocess=True, executable_path="/usr/local/bin/chromedriver")
+driver.add_cookie(cookies)
+driver.get(url)
+html = driver.page_source
+print(html)
 # response = requests.request("GET", url, headers=headers, data=payload, proxies=proxies)
 # text = response.text
 # text = req.content
 # print(text)
-text = ""
+text = html
 soup = BeautifulSoup(text, features = 'html.parser')
 actors = soup.find_all('div', class_="actor-box")
 for actor in actors:
