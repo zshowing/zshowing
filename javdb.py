@@ -61,7 +61,8 @@ cookies = [
 ]
 
 driver = uc.Chrome(options=options, version_main=110, use_subprocess=True, executable_path="/usr/local/bin/chromedriver")
-driver.add_cookie(cookies)
+for cookie in cookies:
+	driver.add_cookie({cookie['name']: cookie['value']})
 driver.get(url)
 html = driver.page_source
 print(html)
