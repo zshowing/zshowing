@@ -49,7 +49,7 @@ options.add_argument("--disable-dev-shm-usage")
 options.add_argument("user-agent=" + headers['user-agent'])
 options.add_argument("cookie=" + headers['cookie'])
 
-with uc.Chrome(options=options) as driver:
+with uc.Chrome(options=options, version_main = 110) as driver:
 	for cookie in cookies:
 		driver.add_cookie(cookie)
 		driver.get(url)
