@@ -6,7 +6,6 @@ import json
 import os
 import undetected_chromedriver as uc
 
-url = "https://javdb.com/users/collection_actors"
 saved_works = []
 prompt = ""
 
@@ -68,9 +67,9 @@ driver.get(url)
 driver.delete_all_cookies()
 for cookie in cookies:
 	driver.add_cookie(cookie)
+url = "https://javdb.com/users/collection_actors"
 driver.get(url)
 html = driver.page_source
-print(html)
 # response = requests.request("GET", url, headers=headers, data=payload, proxies=proxies)
 # text = response.text
 # text = req.content
@@ -81,13 +80,13 @@ actors = soup.find_all('div', class_="actor-box")
 for actor in actors:
 	nextpage = actor.find('a')
 	detailUrl = nextpage.get('href')
-	response2 = requests.request("GET", "https://javdb.com" + detailUrl, headers=headers, data=payload, proxies=proxies)
-	text2 = response2.text
+	# response2 = requests.request("GET", "https://javdb.com" + detailUrl, headers=headers, data=payload, proxies=proxies)
+	driver.get("https://javdb.com" + detailUrl)
+	# text2 = response2.text
+	text2 = driver.page_source
 	soup2 = BeautifulSoup(text2, features = 'html.parser')
-
 	movielist = soup2.find('div', class_="movie-list")
 	movies = movielist.find_all('div', class_="item")
-	
 	for movie in movies:
 		moviepage = movie.find('a')
 		movieurl = moviepage.get('href')
@@ -95,12 +94,16 @@ for actor in actors:
 		fanhao = fanhaodiv.find('strong').text
 		title = fanhaodiv.text
 
-		response3 = requests.request("GET", "https://javdb.com" + movieurl, headers=headers, data=payload, allow_redirects=False, proxies=proxies)
-		if response3.status_code == 302:
-			continue
-		text3 = response3.text
+		# response3 = requests.request("GET", "https://javdb.com" + movieurl, headers=headers, data=payload, allow_redirects=False, proxies=proxies)
+		driver.get("https://javdb.com" + movieurl)
+		text3 = driver.page_source
+		# if response3.status_code == 302:
+			# continue
+		# text3 = response3.text
 		soup3 = BeautifulSoup(text3, features = 'html.parser')
 		magnets_content = soup3.find('div', {'id': 'magnets-content'})
+		if magnets_content == None:
+			continue
 		magnets = magnets_content.find_all('div', class_='item')
 		if len(magnets) == 0:
 			if not any(saved_work == fanhao for saved_work in saved_works):
