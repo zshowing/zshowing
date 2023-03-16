@@ -19,6 +19,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 undetected-chromedriver
+          Xvfb :99 -ac 2>/dev/null & export DISPLAY=:99
       - name: javdb check
         id: run_script
         run: |
