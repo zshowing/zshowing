@@ -13,27 +13,12 @@ if os.path.isfile('javdb-works.json'):
 	with open("javdb-works.json", "r") as f:
 		saved_works = json.load(f)
 
-payload={}
-proxies = {
-    'http': 'http://localhost:9910',  # 设置HTTP代理
-    'https': 'http://localhost:9910'  # 设置HTTPS代理
-}
-headers = {
-  'authority': 'javdb.com',
-  'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-  'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,ja;q=0.6',
-  'cache-control': 'max-age=0',
-  'cookie': 'list_mode=h; theme=auto; locale=zh; over18=1; _ym_uid=1678595611806523704; _ym_d=1678595611; remember_me_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltOVNPRlZaTWxrNVdFTktTRlpWVlRWWmNYUnFJZz09IiwiZXhwIjoiMjAyMy0wMy0xOVQwNDozNzozMy4wMDBaIiwicHVyIjoiY29va2llLnJlbWVtYmVyX21lX3Rva2VuIn19--4ef12d6cd87106ba46037155a6fa3b17f09d43ef; _ym_isad=1; _jdb_session=L8v7bXoXtWD0jlPCkjucQOptG5niRNlSUYRSWtc0IHeIpnfyjGe0Q7Pfv6kTCjj2p2gqqt0jn%2FOjSF87T7rELQa5%2FtGRQQjG5rxruUczT7pnsroIC1gVOTATeZRw1fc3QKKdN25KzFnSdGf2WcSMQzHJlqkeKpCJaZkQq3fRfdVg9L9j%2BKnZ5Q1%2BnQcvzwRDTSTTBbqQQM5bFYeNeIYJdWEPrVzPIuqrCxhByhBCFjrSoRRT7OGRJeA706OwjufUagNWgfZfG29GULkli8lJ%2FfJl4bMywij8h%2BM5qydTjZNqthN7xD9lXy%2Baw4j3hOZFKN%2FmfIVRORJs6parQlHnPh%2F9aQsA%2BYHJ0tjhaf4Q7900%2FSklJ46H1wLoaJ1QxQ%2FbfhA%3D--GNI0HSan1XZ9aVe8--TPBxqRNL1oN8zY8XipKs4w%3D%3D; _jdb_session=xpJJ8wWlI9X9bG4cCrhD6JCGuLZPoG44oqdmewju6W0QwVXkI8246Va5S3tmJfTNwDE%2Fmwb%2FUvl0BJZlpEJbkuOYfNcSMTE797WE46%2BzKGOBkSoV4tZ7OGZAqT%2BjnZDZPqtm9a%2B0bScp%2BxfslBgG2wkq2SooP2k8%2BgC%2BrYTemm2wA7AXF2VxyVONMuKHEZSRo5D1JemC4NT%2FVafCKwUjsiw2Z5hv0mgYgUPLAGNVfkEyQt%2Fyaehfde4ROy9bHY%2FnQkrBNrdwCiJlQpl5uvqFjRFa2uiOsrDp0iF5JI1yVGwBkH65vC1%2FNwnTkkhrw6knW7cZ8FFMcJ8dW0%2Bc%2BuqUhjX8k0QtT%2FKFYx0Hz6pQX6J9TFiLmx%2B8ssu8aqLx1%2BRhMVY%3D--3DKr2xHyLlNnXOfZ--rxBvN%2Bk0mXea%2Ft8g9s6IPQ%3D%3D; locale=zh',
-  'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
-  'sec-ch-ua-mobile': '?0',
-  'sec-ch-ua-platform': '"macOS"',
-  'sec-fetch-dest': 'document',
-  'sec-fetch-mode': 'navigate',
-  'sec-fetch-site': 'none',
-  'sec-fetch-user': '?1',
-  'upgrade-insecure-requests': '1',
-  'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
-}
+def parse_cookies(cookie_string):
+	cookies = []
+	for cookie in cookie_string.split('; '):
+		name, value = cookie.split('=')
+		cookies.append({'name': name, 'value': value})
+	return cookies
 
 options = uc.ChromeOptions()
 options.add_argument("--headless") # 设置为无头模式，即不显示浏览器窗口
@@ -44,27 +29,15 @@ options.add_argument('--disable-application-cache')
 options.add_argument("--disable-setuid-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 
-# 设置请求头
-options.add_argument("user-agent=" + headers['user-agent'])
-
-cookies = [
-    {'name': 'list_mode', 'value': 'h'},
-    {'name': 'theme', 'value': 'auto'},
-    {'name': 'locale', 'value': 'zh'},
-    {'name': 'over18', 'value': '1'},
-    {'name': '_ym_uid', 'value': '1678595611806523704'},
-    {'name': '_ym_d', 'value': '1678595611'},
-    {'name': 'remember_me_token', 'value': 'eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltOVNPRlZaTWxrNVdFTktTRlpWVlRWWmNYUnFJZz09IiwiZXhwIjoiMjAyMy0wMy0xOVQwNDozNzozMy4wMDBaIiwicHVyIjoiY29va2llLnJlbWVtYmVyX21lX3Rva2VuIn19--4ef12d6cd87106ba46037155a6fa3b17f09d43ef'},
-    {'name': '_ym_isad', 'value': '1'},
-    {'name': '_jdb_session', 'value': 'L8v7bXoXtWD0jlPCkjucQOptG5niRNlSUYRSWtc0IHeIpnfyjGe0Q7Pfv6kTCjj2p2gqqt0jn%2FOjSF87T7rELQa5%2FtGRQQjG5rxruUczT7pnsroIC1gVOTATeZRw1fc3QKKdN25KzFnSdGf2WcSMQzHJlqkeKpCJaZkQq3fRfdVg9L9j%2BKnZ5Q1%2BnQcvzwRDTSTTBbqQQM5bFYeNeIYJdWEPrVzPIuqrCxhByhBCFjrSoRRT7OGRJeA706OwjufUagNWgfZfG29GULkli8lJ%2FfJl4bMywij8h%2BM5qydTjZNqthN7xD9lXy%2Baw4j3hOZFKN%2FmfIVRORJs6parQlHnPh%2F9aQsA%2BYHJ0tjhaf4Q7900%2FSklJ46H1wLoaJ1QxQ%2FbfhA%3D--GNI0HSan1XZ9aVe8--TPBxqRNL1oN8zY8XipKs4w%3D%3D'},
-]
+cookie = ""
+with open("javdb.cookie", "r") as f:
+		cookie = f.read()
 
 driver = uc.Chrome(options=options, version_main=110, use_subprocess=True, executable_path="/usr/local/bin/chromedriver")
-
-# first visit home page
 url = "https://javdb.com"
 driver.get(url)
 driver.delete_all_cookies()
+cookies = parse_cookies(cookie)
 for cookie in cookies:
 	driver.add_cookie(cookie)
 url = "https://javdb.com/users/collection_actors"
