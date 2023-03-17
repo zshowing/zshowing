@@ -2,6 +2,8 @@
 - Objective-C & Swift.
 - Python lover.
 
+Vist my blog: [https://jon.observer](https://jon.observer)
+
 <!--
 **zshowing/zshowing** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
