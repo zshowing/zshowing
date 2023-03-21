@@ -68,9 +68,9 @@ except json.decoder.JSONDecodeError:
 if count == 0:
   count = int(msg) - 1
 
+now = datetime.now()
 if int(msg) > count:
 	print("Eureka!                ", end='\r')
-	now = datetime.now()
 	response = requests.post(submiturl + token, data="params="+param2, headers=HEADERS)
 	if response.json()["code"] == 200:
 		data = {"count": int(msg), "timestamp": now}
