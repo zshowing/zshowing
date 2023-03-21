@@ -1,1 +1,1 @@
-Done re-submitting, time using: 0:08:13, current count: 1
+Reset the count to 0
