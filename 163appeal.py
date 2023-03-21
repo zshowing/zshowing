@@ -2,7 +2,6 @@ import requests
 from datetime import datetime
 import re
 import json
-import sys
 import os
 
 token = ""
@@ -15,6 +14,7 @@ param2 = ""
 cookie = ""
 count = 0
 previous = None
+msg = ''
 
 if os.path.exists('163-last-status.json'):
 	with open('163-last-status.json', 'r') as f:
@@ -57,8 +57,13 @@ HEADERS = {
 }
 
 response = requests.post(counturl + token, data="params="+param1, headers=HEADERS)
-msg = response.json()['msg']
-print(token, param1, HEADERS, response.text)
+try:
+  msg = response.json()['msg']
+except json.decoder.JSONDecodeError:
+	print('JSON error')
+	with open('163-output.txt', 'w+') as f:
+		f.write('Error, need refill cookies!')
+	
 
 if count == 0:
   count = int(msg) - 1
