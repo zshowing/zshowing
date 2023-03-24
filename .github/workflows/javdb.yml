@@ -36,13 +36,10 @@ jobs:
         id: python-output
         run: 
           if [ -f "javdb-prompt.txt" ]; then
-              delimiter=$(openssl rand -hex 8)
-          {
-            echo "OUT<<$delimiter"
-            sed -e '$a\' javdb-prompt.txt
-            echo "$delimiter"
-          } >> "$GITHUB_OUTPUT";
-              echo "NEED-REPORT=true" >> $GITHUB_ENV;
+            echo "OUT<<EOF" >> $GITHUB_OUTPUT
+            sed -e '$a\' javdb-prompt.txt >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "NEED-REPORT=true" >> $GITHUB_ENV;
           else
             echo "NEED-REPORT=false" >> $GITHUB_ENV;
           fi;
