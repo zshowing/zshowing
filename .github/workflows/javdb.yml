@@ -36,9 +36,7 @@ jobs:
         id: python-output
         run: 
           if [ -f "javdb-prompt.txt" ]; then
-            echo "RESULT<<EOF" >> $GITHUB_OUTPUT;
-            sed -e '$a\' javdb-prompt.txt >> $GITHUB_OUTPUT;
-            echo "EOF" >> $GITHUB_OUTPUT;
+            echo "RESULT=$(cat javdb-prompt.txt)" >> $GITHUB_OUTPUT;
             echo "NEED-REPORT=true" >> $GITHUB_ENV;
           else
             echo "NEED-REPORT=false" >> $GITHUB_ENV;
