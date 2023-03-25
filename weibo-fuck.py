@@ -36,7 +36,7 @@ decoded = data.decode("utf-8")
 data_json = json.loads(decoded)
 code = data_json['code']
 
-report = "微博" + data_json['message']
+report = "微博：" + data_json['message'] + ";"
 
 dataList = []
 boundary = 'WebKitFormBoundaryS2K5BdawhGxhhoS5'
@@ -59,7 +59,7 @@ decoded = data.decode("utf-8")
 data_json = json.loads(decoded)
 code = data_json['code']
 
-report += "网易云音乐" + data_json['message']
+report += "网易云音乐：" + data_json['message']
 
 with open('weibo_status.txt', 'w+') as f:
     f.write(report)
