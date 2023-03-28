@@ -35,5 +35,31 @@ data = res.read()
 decoded = data.decode("utf-8")
 data_json = json.loads(decoded)
 code = data_json['code']
+
+report = "微博：" + data_json['message'] + ";"
+
+dataList = []
+boundary = 'WebKitFormBoundaryS2K5BdawhGxhhoS5'
+dataList.append(encode('--' + boundary))
+dataList.append(encode('Content-Disposition: form-data; name=body;'))
+
+dataList.append(encode('Content-Type: {}'.format('text/plain')))
+dataList.append(encode(''))
+
+dataList.append(encode("{\"complaintedEnterprise1\":\"\",\"complaintedEnterprise2\":\"网易云音乐\",\"complaintType\":1,\"complaintSource\":\"0\",\"loginFlag\":true,\"isAllFlag\":true,\"idnumber\":\"" + id_num + "\",\"agentname\":\"" + realname + "\",\"agentmobile\":\"" + mobile + "\",\"sex\":\"1\",\"address\":[\"110000\",\"110105\"],\"email\":\"" + email + "\",\"validateCode\":\"haks\",\"code\":\"\",\"complaintedEnterprise\":\"网易\",\"complaintTwoProblemId\":\"86f005c0c8714e05884f3e84a25ecd1b\",\"complaintThreeProblemId\":\"75e27619e96d4110b426e5fabd011feb\",\"complaintOneProblemId\":\"206\",\"complaintBusinessId\":\"1046\",\"complaintTitle\":\"平台无故禁言\",\"problemDetails\":\"我的账号用户id是38460459，去年莫名被禁言，似乎只因为我在《我爱北京天安门》曲目下评论两个字“测试”，这简直滑天下之大稽，这两个字违法了吗？违反了哪条规定，哪条法规了吗？一年来我一直在投诉这个问题，站方一直不理会，这是为什么？我要求恢复我账号的评论权限，并赔礼道歉。\"}"))
+dataList.append(encode('--'+boundary+'--'))
+dataList.append(encode(''))
+body = b'\r\n'.join(dataList)
+payload = body
+
+conn.request("POST", "/complainInfoController/saveComplaintInfo", payload, headers)
+res = conn.getresponse()
+data = res.read()
+decoded = data.decode("utf-8")
+data_json = json.loads(decoded)
+code = data_json['code']
+
+report += "网易云音乐：" + data_json['message']
+
 with open('weibo_status.txt', 'w+') as f:
-    f.write(data_json['message'])
+    f.write(report)

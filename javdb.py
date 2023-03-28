@@ -86,7 +86,7 @@ for actor in actors:
 			if any(saved_work == fanhao for saved_work in saved_works):
 				print("已移除", title)
 				saved_works.remove(fanhao)
-				prompt += fanhaodiv.text + "已出种！" + "地址： https://javdb.com" + movieurl + " \n"
+				prompt += fanhaodiv.text + "已出种！" + "地址： https://javdb.com" + movieurl + " ；"
 				print(fanhaodiv.text, "出种子啦！")
 			break
 		print("Done check " + title)
