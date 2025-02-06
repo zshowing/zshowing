@@ -44,7 +44,7 @@ def setup_driver():
 # Load cookies into driver
 def load_cookies(driver, cookie_file):
     with open(cookie_file, "r") as f:
-        cookie_string = f.read()
+        cookie_string = f.read().replace("\n","")
     cookies = parse_cookies(cookie_string)
     driver.get(BASE_URL)
     driver.delete_all_cookies()
