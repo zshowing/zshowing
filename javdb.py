@@ -16,6 +16,7 @@ if os.path.isfile('javdb-works.json'):
 def parse_cookies(cookie_string):
 	cookies = []
 	for cookie in cookie_string.split('; '):
+		cookie = cookie.replace("\n", "")
 		name, value = cookie.split('=')
 		cookies.append({'name': name, 'value': value})
 	return cookies
