@@ -5,6 +5,7 @@ import time
 import json
 import os
 import undetected_chromedriver as uc
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Constants
 BASE_URL = "https://javdb.com"
