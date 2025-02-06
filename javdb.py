@@ -38,7 +38,7 @@ def setup_driver():
     options.add_argument('--disable-application-cache')
     options.add_argument("--disable-setuid-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument(f'--proxy-server=scraperapi.render=true.output_format=json.autoparse=true.keep_headers=true:bee21d384e4523b5e93fbf96b37a90b2@proxy-server.scraperapi.com:8001')
+    options.add_argument(f'--proxy-server=scraperapi:bee21d384e4523b5e93fbf96b37a90b2@proxy-server.scraperapi.com:8001')
 
     driver = uc.Chrome(options=options, version_main=132, use_subprocess=True, executable_path=CHROMEDRIVER_PATH)
     return driver
@@ -101,12 +101,6 @@ def main():
     # Setup driver and load cookies
     driver = setup_driver()
     load_cookies(driver, COOKIE_PATH)
-    
-    # Navigate to the actor collection page
-    proxies = {
-      "https": "scraperapi.render=true.output_format=json.autoparse=true.keep_headers=true:bee21d384e4523b5e93fbf96b37a90b2@proxy-server.scraperapi.com:8001"
-    }
-
     driver.get(f"{BASE_URL}{ACTOR_URL}")
     
     soup = BeautifulSoup(driver.page_source, 'html.parser')
