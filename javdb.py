@@ -46,6 +46,7 @@ def load_cookies(driver, cookie_file):
     with open(cookie_file, "r") as f:
         cookie_string = f.read().replace("\n","")
     cookies = parse_cookies(cookie_string)
+    print(cookies)
     driver.get(BASE_URL)
     driver.delete_all_cookies()
     time.sleep(3)
