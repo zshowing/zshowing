@@ -51,7 +51,6 @@ def load_cookies(driver, cookie_file):
     cookies = parse_cookies(cookie_string)
     driver.get(BASE_URL)
     driver.delete_all_cookies()
-    time.sleep(3)
     for cookie in cookies:
         driver.add_cookie(cookie)
     driver.refresh()
@@ -103,7 +102,12 @@ def main():
     load_cookies(driver, COOKIE_PATH)
     
     # Navigate to the actor collection page
-    driver.get(f"{BASE_URL}{ACTOR_URL}")
+    proxies = {
+      "https": "scraperapi.render=true.output_format=json.autoparse=true.keep_headers=true:bee21d384e4523b5e93fbf96b37a90b2@proxy-server.scraperapi.com:8001"
+    }
+
+    driver.get(f"{BASE_URL}{ACTOR_URL}", proxies = proxies)
+    
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     print(soup)
     actors = soup.find_all('div', class_="actor-box")
