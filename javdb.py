@@ -48,6 +48,7 @@ def load_cookies(driver, cookie_file):
     cookies = parse_cookies(cookie_string)
     driver.get(BASE_URL)
     driver.delete_all_cookies()
+    time.sleep(3)
     for cookie in cookies:
         driver.add_cookie(cookie)
     driver.refresh()
