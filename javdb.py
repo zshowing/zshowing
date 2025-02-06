@@ -6,100 +6,119 @@ import json
 import os
 import undetected_chromedriver as uc
 
-saved_works = []
+# Constants
+BASE_URL = "https://javdb.com"
+ACTOR_URL = "/users/collection_actors"
+COOKIE_PATH = "javdb.cookie"
+WORKS_FILE = "javdb-works.json"
+PROMPT_FILE = "javdb-prompt.txt"
+CHROMEDRIVER_PATH = "/usr/local/bin/chromedriver"
+
+# Initialize saved works
+saved_works = set()  # Use set for O(1) membership checks
 prompt = ""
 
-if os.path.isfile('javdb-works.json'):
-	with open("javdb-works.json", "r") as f:
-		saved_works = json.load(f)
+# Load previously saved works
+if os.path.isfile(WORKS_FILE):
+    with open(WORKS_FILE, "r") as f:
+        saved_works = set(json.load(f))
 
+# Parse cookies
 def parse_cookies(cookie_string):
-	cookies = []
-	for cookie in cookie_string.split('; '):
-		cookie = cookie.replace("\n", "")
-		name, value = cookie.split('=')
-		cookies.append({'name': name, 'value': value})
-	return cookies
+    return [{'name': name, 'value': value} for cookie in cookie_string.split('; ') for name, value in [cookie.split('=')]]
 
-options = uc.ChromeOptions()
-options.add_argument("--headless") # 设置为无头模式，即不显示浏览器窗口
-options.add_argument("--disable-extensions") # 禁用扩展程序
-options.add_argument("--disable-gpu") # 禁用GPU加速
-options.add_argument("--no-sandbox") # 以沙盒模式运行
-options.add_argument('--disable-application-cache')
-options.add_argument("--disable-setuid-sandbox")
-options.add_argument("--disable-dev-shm-usage")
+# Setup Chrome options
+def setup_driver():
+    options = uc.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument('--disable-application-cache')
+    options.add_argument("--disable-setuid-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    
+    driver = uc.Chrome(options=options, version_main=132, use_subprocess=True, executable_path=CHROMEDRIVER_PATH)
+    return driver
 
-cookie = ""
-with open("javdb.cookie", "r") as f:
-		cookie = f.read()
+# Load cookies into driver
+def load_cookies(driver, cookie_file):
+    with open(cookie_file, "r") as f:
+        cookie_string = f.read()
+    cookies = parse_cookies(cookie_string)
+    driver.get(BASE_URL)
+    driver.delete_all_cookies()
+    for cookie in cookies:
+        driver.add_cookie(cookie)
+    driver.refresh()
 
-driver = uc.Chrome(options=options, version_main=132, use_subprocess=True, executable_path="/usr/local/bin/chromedriver")
-url = "https://javdb.com"
-driver.get(url)
-driver.delete_all_cookies()
-cookies = parse_cookies(cookie)
-print(cookies)
-for cookie in cookies:
-	driver.add_cookie(cookie)
-url = "https://javdb.com/users/collection_actors"
-driver.get(url)
-html = driver.page_source
-# response = requests.request("GET", url, headers=headers, data=payload, proxies=proxies)
-# text = response.text
-# text = req.content
-# print(text)
-text = html
-soup = BeautifulSoup(text, features = 'html.parser')
-actors = soup.find_all('div', class_="actor-box")
-for actor in actors:
-	nextpage = actor.find('a')
-	detailUrl = nextpage.get('href')
-	# response2 = requests.request("GET", "https://javdb.com" + detailUrl, headers=headers, data=payload, proxies=proxies)
-	driver.get("https://javdb.com" + detailUrl)
-	# text2 = response2.text
-	text2 = driver.page_source
-	soup2 = BeautifulSoup(text2, features = 'html.parser')
-	movielist = soup2.find('div', class_="movie-list")
-	movies = movielist.find_all('div', class_="item")
-	for movie in movies:
-		moviepage = movie.find('a')
-		movieurl = moviepage.get('href')
-		fanhaodiv = movie.find('div', class_='video-title')
-		fanhao = fanhaodiv.find('strong').text
-		title = fanhaodiv.text
+# Extract movie details from the movie page
+def check_movie_for_magnets(driver, movieurl, fanhao):
+    driver.get(f"{BASE_URL}{movieurl}")
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    magnets_content = soup.find('div', {'id': 'magnets-content'})
+    if magnets_content:
+        magnets = magnets_content.find_all('div', class_='item')
+        if magnets:
+            print(f"Found magnet for {fanhao}")
+            return True  # Movie has a magnet
+    return False  # No magnet found
 
-		# response3 = requests.request("GET", "https://javdb.com" + movieurl, headers=headers, data=payload, allow_redirects=False, proxies=proxies)
-		driver.get("https://javdb.com" + movieurl)
-		text3 = driver.page_source
-		# if response3.status_code == 302:
-			# continue
-		# text3 = response3.text
-		soup3 = BeautifulSoup(text3, features = 'html.parser')
-		magnets_content = soup3.find('div', {'id': 'magnets-content'})
-		if magnets_content == None:
-			continue
-		magnets = magnets_content.find_all('div', class_='item')
-		if len(magnets) == 0:
-			if not any(saved_work == fanhao for saved_work in saved_works):
-				print("已记录", title)
-				saved_works.append(fanhao)
-		else:
-			if any(saved_work == fanhao for saved_work in saved_works):
-				print("已移除", title)
-				saved_works.remove(fanhao)
-				prompt += fanhaodiv.text + "已出种！" + "地址： https://javdb.com" + movieurl + " ；"
-				print(fanhaodiv.text, "出种子啦！")
-			break
-		print("Done check " + title)
-		time.sleep(3)
+# Process each actor's collection
+def process_actor(driver, actor):
+    nextpage = actor.find('a')
+    detailUrl = nextpage.get('href')
+    driver.get(f"{BASE_URL}{detailUrl}")
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    movielist = soup.find('div', class_="movie-list")
+    if movielist:
+        movies = movielist.find_all('div', class_="item")
+        for movie in movies:
+            fanhaodiv = movie.find('div', class_='video-title')
+            fanhao = fanhaodiv.find('strong').text
+            title = fanhaodiv.text.strip()
+            movieurl = movie.find('a').get('href')
 
-with open("javdb-works.json", "w+") as f:
-	json.dump(saved_works, f)
+            # Check if movie has a magnet
+            if check_movie_for_magnets(driver, movieurl, fanhao):
+                if fanhao in saved_works:
+                    print(f"已移除 {title}")
+                    saved_works.remove(fanhao)
+                    prompt += f"{fanhaodiv.text}已出种！地址： https://javdb.com{movieurl}；"
+                    print(f"{fanhaodiv.text} 出种子啦！")
+                break
+            else:
+                if fanhao not in saved_works:
+                    print(f"已记录 {title}")
+                    saved_works.add(fanhao)
+    time.sleep(3)
 
-if prompt == "":
-	if os.path.isfile('javdb-prompt.txt'):
-		os.remove('javdb-prompt.txt')
-else:
-	with open("javdb-prompt.txt", "w+") as f:
-		f.write(prompt)
+def main():
+    # Setup driver and load cookies
+    driver = setup_driver()
+    load_cookies(driver, COOKIE_PATH)
+    
+    # Navigate to the actor collection page
+    driver.get(f"{BASE_URL}{ACTOR_URL}")
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    actors = soup.find_all('div', class_="actor-box")
+
+    for actor in actors:
+        process_actor(driver, actor)
+
+    # Save the updated works list
+    with open(WORKS_FILE, "w+") as f:
+        json.dump(list(saved_works), f)
+
+    # Handle prompt
+    if prompt:
+        with open(PROMPT_FILE, "w+") as f:
+            f.write(prompt)
+    else:
+        if os.path.isfile(PROMPT_FILE):
+            os.remove(PROMPT_FILE)
+    
+    driver.quit()
+
+if __name__ == "__main__":
+    main()
