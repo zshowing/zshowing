@@ -67,7 +67,6 @@ def check_movie_for_magnets(driver, movieurl, fanhao):
 
 # Process each actor's collection
 def process_actor(driver, actor):
-    print(actor)
     nextpage = actor.find('a')
     detailUrl = nextpage.get('href')
     driver.get(f"{BASE_URL}{detailUrl}")
@@ -103,6 +102,7 @@ def main():
     # Navigate to the actor collection page
     driver.get(f"{BASE_URL}{ACTOR_URL}")
     soup = BeautifulSoup(driver.page_source, 'html.parser')
+    print(soup)
     actors = soup.find_all('div', class_="actor-box")
 
     for actor in actors:
