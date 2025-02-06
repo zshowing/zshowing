@@ -38,7 +38,7 @@ def setup_driver():
     options.add_argument('--disable-application-cache')
     options.add_argument("--disable-setuid-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument(f'--proxy-server=scraperapi:bee21d384e4523b5e93fbf96b37a90b2@proxy-server.scraperapi.com:8001')
+    options.add_argument(f'--proxy-server=98.8.195.160:443')
 
     driver = uc.Chrome(options=options, version_main=132, use_subprocess=True, executable_path=CHROMEDRIVER_PATH)
     return driver
