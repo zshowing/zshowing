@@ -39,6 +39,7 @@ url = "https://javdb.com"
 driver.get(url)
 driver.delete_all_cookies()
 cookies = parse_cookies(cookie)
+print(cookies)
 for cookie in cookies:
 	driver.add_cookie(cookie)
 url = "https://javdb.com/users/collection_actors"
