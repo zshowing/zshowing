@@ -46,7 +46,6 @@ def load_cookies(driver, cookie_file):
     with open(cookie_file, "r") as f:
         cookie_string = f.read().replace("\n","")
     cookies = parse_cookies(cookie_string)
-    print(cookies)
     driver.get(BASE_URL)
     driver.delete_all_cookies()
     time.sleep(3)
@@ -68,6 +67,7 @@ def check_movie_for_magnets(driver, movieurl, fanhao):
 
 # Process each actor's collection
 def process_actor(driver, actor):
+    print(actor)
     nextpage = actor.find('a')
     detailUrl = nextpage.get('href')
     driver.get(f"{BASE_URL}{detailUrl}")
