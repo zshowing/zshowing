@@ -33,7 +33,7 @@ cookie = ""
 with open("javdb.cookie", "r") as f:
 		cookie = f.read()
 
-driver = uc.Chrome(options=options, version_main=133, use_subprocess=True, executable_path="/usr/local/bin/chromedriver")
+driver = uc.Chrome(options=options, version_main=132, use_subprocess=True, executable_path="/usr/local/bin/chromedriver")
 url = "https://javdb.com"
 driver.get(url)
 driver.delete_all_cookies()
