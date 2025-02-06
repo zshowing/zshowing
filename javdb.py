@@ -39,7 +39,7 @@ def setup_driver():
     options.add_argument("--disable-setuid-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     
-    driver = uc.Chrome(options=options, executable_path=ChromeDriverManager(driver_version="133").install())
+    driver = uc.Chrome(options=options, version_main=133, use_subprocess=True, executable_path="/usr/local/bin/chromedriver")
     return driver
 
 # Load cookies into driver
