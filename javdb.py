@@ -23,6 +23,7 @@ def load_saved_works():
 
 # 解析 Cookie 字符串为字典
 def parse_cookies(cookie_string):
+    cookie_string = cookie_string.replace("\n", "")  # 去除换行符
     return {item.split('=')[0]: item.split('=')[1] for item in cookie_string.split('; ')}
 
 # 获取页面内容
