@@ -5,6 +5,7 @@ import time
 import json
 import os
 import undetected_chromedriver as uc
+from pathlib import Path
 
 # Constants
 BASE_URL = "https://javdb.com"
@@ -43,7 +44,9 @@ def setup_driver():
 
 # Load cookies into driver
 def load_cookies(driver, cookie_file):
-    with open(cookie_file, "r") as f:
+    script_dir = Path(__file__).parent
+    cookie_path = script_dir / COOKIE_PATH
+    with open(cookie_path, "r") as f:
         cookie_string = f.read().replace("\n","")
     cookies = parse_cookies(cookie_string)
     driver.get(BASE_URL)
